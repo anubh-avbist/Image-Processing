@@ -2,11 +2,11 @@ import pygame
 import pygame.camera
 import math
 
-pixel_size = 7
-font_size = 10
-width = 1200
-height = 1000
 
+pixel_size = 16
+font_size = 16
+width = 1200
+height = 800
 pygame.init()
 screen = pygame.display.set_mode((width, height))
 clock = pygame.time.Clock()
