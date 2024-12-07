@@ -10,7 +10,7 @@ width = image.get_width()
 height = image.get_height()
 
 
-pixel_size = 8
+pixel_size = 2
 
 
 pygame.init()
@@ -24,6 +24,7 @@ cam = None
 if cam_list:
     cam = pygame.camera.Camera(cam_list[0], (width, height))
     cam.start()
+cam = None
 
 image = pygame.transform.scale(image, (width,height))
 screen.blit(image,(0,0))
@@ -100,7 +101,7 @@ while running:
         if pressed[pygame.K_q]:
             running = False
         if pressed[pygame.K_c]:
-            pygame.image.save(screen, "images/screenshot.jpeg")
+            pygame.image.save(screen, "images/gradient.jpeg")
 
 
     if cam is not None: 

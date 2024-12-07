@@ -3,10 +3,14 @@ import pygame.camera
 import math
 
 
-pixel_size = 16
-font_size = 16
-width = 1200
-height = 800
+pixel_size = 8
+font_size = 8
+
+
+image = pygame.image.load("images/Ramona.png")
+image = pygame.transform.scale(image,(800,800))
+width = image.get_width()
+height = image.get_height()
 pygame.init()
 screen = pygame.display.set_mode((width, height))
 clock = pygame.time.Clock()
@@ -16,8 +20,9 @@ pygame.camera.init()
 cam_list = pygame.camera.list_cameras()
 cam = None
 if cam_list:
-    cam = pygame.camera.Camera(cam_list[0], (width, height))
-    cam.start()
+    # cam = pygame.camera.Camera(cam_list[0], (width, height))
+    # cam.start()
+    pass
 
 grayscale = "@$B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1\{\}[]?-_+~<>i!lI;:\",."
 #grayscale = "=======--------:::::::::........  "
@@ -25,7 +30,7 @@ grayscale = "@$B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1\{\}[]?-_+~<>i!lI;:\"
 text_font = pygame.font.SysFont('Arial',font_size)
 
 def draw_text(text, font, color, x, y):
-    img = font.render(text, True, color)
+    img = font.render(text, True, (0,0,0))
     screen.blit(img, (x, y))
 
 def pixel_to_char(pixel):
@@ -80,14 +85,14 @@ while running:
         if pressed[pygame.K_q]:
             running = False
         if pressed[pygame.K_c]:
-            pygame.image.save(screen, "images/screenshot.jpeg")
+            pygame.image.save(screen, "images/textified.jpeg")
 
     if cam is not None: 
-        image = cam.get_image()
-        image = pygame.transform.scale(image, (width,height))
+        # image = cam.get_image()
+        # image = pygame.transform.scale(image, (width,height))
         textify_img(image)
     else:
-        textify_img(pygame.image.load("images/feeling.png"))
+        textify_img(pygame.image.load("images/Ramona.png"))
     pygame.display.flip()
     clock.tick(60)  
 

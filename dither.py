@@ -11,7 +11,7 @@ width = image.get_width()+10
 height = image.get_height()+10
 
 
-pixel_size = 3
+pixel_size = 1
 
 
 pygame.init()
@@ -71,8 +71,13 @@ def matrix_to_screen(matrix):
         for i in range (1, rows):
             rect = pygame.Rect(i*pixel_size, j*pixel_size, pixel_size,pixel_size)
             color = matrix[i,j]
-            color = max(0,min(255,color))
-            pygame.draw.rect(screen,(color,color,color),rect)
+            color = max(0,min(255,color))/255
+            r = image.get_at((i*pixel_size, j*pixel_size))[0]
+            g = image.get_at((i*pixel_size, j*pixel_size))[1]
+            b = image.get_at((i*pixel_size, j*pixel_size))[2]
+            finalColor = (int(r*color), int(g*color), int(b*color))
+
+            pygame.draw.rect(screen, finalColor, rect)
 
 def dither(image):
     
@@ -110,7 +115,7 @@ while running:
         if pressed[pygame.K_q]:
             running = False
         if pressed[pygame.K_c]:
-            pygame.image.save(screen, "images/screenshot.jpeg")
+            pygame.image.save(screen, "images/dither.jpeg")
 
 
     if cam is not None: 
