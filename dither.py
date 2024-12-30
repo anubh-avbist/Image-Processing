@@ -5,8 +5,16 @@ import math
 import numpy
 import numpy.linalg
 
-image = pygame.image.load("images/Ramona.png")
-image = pygame.transform.scale(image,(800,800))
+image = pygame.image.load("images/CARKTEST.jpg")
+if image.get_width() > 800:
+    scale = 800 / image.get_width()
+    image = pygame.transform.scale(image ,(image.get_width()*scale, image.get_height()*scale))
+if image.get_height() > 900:
+    scale = 900/image.get_height()
+    image = pygame.transform.scale(image ,(image.get_width()*scale, image.get_height()*scale))
+else:
+
+    image = pygame.transform.scale(image,(800,800))
 width = image.get_width()+10
 height = image.get_height()+10
 

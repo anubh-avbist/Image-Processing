@@ -3,8 +3,8 @@ import pygame.camera
 import math
 
 
-pixel_size = 8
-font_size = 8
+pixel_size = 6
+font_size = 6
 
 
 image = pygame.image.load("images/Ramona.png")
@@ -20,11 +20,11 @@ pygame.camera.init()
 cam_list = pygame.camera.list_cameras()
 cam = None
 if cam_list:
-    # cam = pygame.camera.Camera(cam_list[0], (width, height))
-    # cam.start()
-    pass
+    cam = pygame.camera.Camera(cam_list[0], (width, height))
+    cam.start()
+    
 
-grayscale = "@$B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1\{\}[]?-_+~<>i!lI;:\",."
+grayscale = "@$B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1\{\}[]?-_+~<>i!lI;:,."
 #grayscale = "=======--------:::::::::........  "
 #grayscale = "僵亁丵丣乑丱不丫丄一"
 text_font = pygame.font.SysFont('Arial',font_size)
@@ -88,8 +88,8 @@ while running:
             pygame.image.save(screen, "images/textified.jpeg")
 
     if cam is not None: 
-        # image = cam.get_image()
-        # image = pygame.transform.scale(image, (width,height))
+        image = cam.get_image()
+        image = pygame.transform.scale(image, (width,height))
         textify_img(image)
     else:
         textify_img(pygame.image.load("images/Ramona.png"))
