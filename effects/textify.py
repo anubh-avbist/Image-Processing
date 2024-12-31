@@ -5,16 +5,16 @@ class Textify(Effect):
 
     @staticmethod
     def draw_text(screen, text, font, color, x, y):
-        img = font.render(text, 1, (0,0,0), pygame.SRCALPHA)
+        img = font.render(text, True, (0,0,0))
         screen.blit(img, (x, y))
 
     @staticmethod
     def pixel_to_char(pixel):
-        grayscale = "@$B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1\{\}[]?-_+~<>i!lI;:,."
+        grayscale = "@$B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/|()1{[]?-_+~<>i!lI;:,."
 
         val = Effect.get_val(pixel)
         ratio = val/255
-        index = grayscale.__len__()*(ratio*ratio) 
+        index = len(grayscale)*(ratio*ratio) 
 
         # Clamps index to scale length
         if index >= grayscale.__len__():
@@ -32,7 +32,7 @@ class Textify(Effect):
         
 
         args = iter(parameters)
-        font_family = next(args,'Arial')
+        font_family = next(args,'monospace')
         font_size = int(next(args,12))
         pixel_size:int = int(next(args,12))
         pygame.font.init()
@@ -51,16 +51,14 @@ class Textify(Effect):
                 ascii_array[j].append(Textify.pixel_to_char(pixel))
                 color_array[j].append([pixel[0],pixel[1],pixel[2]])
         
-        image.fill((255,255,255))
-        
-        
-
         # Blits text onto screen
+        screen = pygame.display.set_mode((width, height))
+        screen.fill((255,255,255))
         for j in range (0, int(height/pixel_size)):
             for i in range (0,int(width/pixel_size)):
                 pixel = image.get_at((pixel_size*i,pixel_size*j))
                 col = color_array[j][i]
-                Textify.draw_text(image, ascii_array[j][i],text_font, col, i*pixel_size, j*pixel_size)
-        return image
+                Textify.draw_text(screen, ascii_array[j][i],text_font, col, i*pixel_size, j*pixel_size)
+        return screen
     
     
