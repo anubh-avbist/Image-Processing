@@ -4,12 +4,14 @@ import argparse
 import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
 
-from effects import dither, textify
+from effects import dither, edge, textify
 import pygame
 from enum import Enum
 
 EFFECTS = {
-    "dither": dither.Dither
+    "dither": dither.Dither,
+    "edge": edge.Edge,
+    "textify": textify.Textify
 }
 
 def process(filename, img:pygame.Surface, output_directory, args: list[list[str]]):

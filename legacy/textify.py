@@ -4,10 +4,10 @@ import math
 
 
 pixel_size = 6
-font_size = 6
+font_size = 8
 
 
-image = pygame.image.load("images/Ramona.png")
+image = pygame.image.load("../images/Ramona.png")
 image = pygame.transform.scale(image,(800,800))
 width = image.get_width()
 height = image.get_height()
@@ -22,12 +22,13 @@ cam = None
 if cam_list:
     cam = pygame.camera.Camera(cam_list[0], (width, height))
     cam.start()
+cam = None
     
 
 grayscale = "@$B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1\{\}[]?-_+~<>i!lI;:,."
 #grayscale = "=======--------:::::::::........  "
 #grayscale = "僵亁丵丣乑丱不丫丄一"
-text_font = pygame.font.SysFont('Arial',font_size)
+text_font = pygame.font.SysFont('monospace',font_size)
 
 def draw_text(text, font, color, x, y):
     img = font.render(text, True, (0,0,0))
@@ -85,14 +86,14 @@ while running:
         if pressed[pygame.K_q]:
             running = False
         if pressed[pygame.K_c]:
-            pygame.image.save(screen, "images/textified.jpeg")
+            pygame.image.save(screen, "../images/textified.jpeg")
 
     if cam is not None: 
         image = cam.get_image()
         image = pygame.transform.scale(image, (width,height))
         textify_img(image)
     else:
-        textify_img(pygame.image.load("images/Ramona.png"))
+        textify_img(pygame.image.load("../images/Ramona.png"))
     pygame.display.flip()
     clock.tick(60)  
 
