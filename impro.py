@@ -2,32 +2,38 @@
 import sys
 import argparse
 import os
-
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
 
 from effects import dither, textify
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
 import pygame
 from enum import Enum
 
-
-
-def process(img, output, effects):
-
-    for effect in effects:
-        img = effect(img)
-
 EFFECTS = {
-    "dither": dither, 
-    "textify":textify
-    }
+    "dither": dither.Dither
+}
 
-def verify(input_path, output_directory, filters):
+def process(filename, img:pygame.Surface, output_directory, args: list[list[str]]):
     
+    processed_image:pygame.Surface = img
+    filters = []
+    for arg in args:
+        effect = EFFECTS[arg[0]]
+        filters.append(arg[0])
+        processed_image = effect.apply(processed_image, *arg[1:])
+
+    pygame.image.save(processed_image, f"{output_directory}/{os.path.splitext(filename)[0]}_{'_'.join(filters)}{os.path.splitext(filename)[1]}")
+
+def verify(input_path, output_directory, filters: list[list[str]]):
+    filename = os.path.basename(input_path)
     try:
         image = pygame.image.load(input_path)
     except FileNotFoundError:
         print(f"Could not find file: {input_path}")
         return -1
+    except: 
+        print(f"Could not properly load image: {input_path}")
+        return -1
+    
         
     if not os.path.isdir(output_directory):
         print(f"This directory does not exist: {output_directory}")
@@ -38,19 +44,18 @@ def verify(input_path, output_directory, filters):
         return -1
     
 
-    pipeline = [EFFECTS[e.lower()] for e in list(filters) if e.lower() in EFFECTS]
+    pipeline = [e for e in list(filters) if e[0].lower() in EFFECTS]
     
     if(len(pipeline) != len(filters)):
-        print(f"Processes/Filters not found: {[e for e in list(filters) if not e.lower() in EFFECTS]}")
+        print(f"Processes/Filters not found: {[e[0] for e in list(filters) if not e[0].lower() in EFFECTS]}")
         return -1
     
-    process(image, output_directory, pipeline)
+    process(filename, image, output_directory, pipeline)
 
 
 def main():
     parser = argparse.ArgumentParser(
             prog = os.path.basename(__file__),
-            usage = "%(prog)s process <input_image> <output_path> -f <effects>",
             description="Command-Line Tool for Image Processing", 
             add_help=False
         )
@@ -60,17 +65,21 @@ def main():
     process_parser = subparsers.add_parser('process', help = "Process the shit")
 
 
-    parser.add_argument("-h", "-help", "--help", action="help", help = "Show this help message and exit")
-    process_parser.add_argument("-f", action="append", nargs = "*", help = "Add an effect/filter to the image")
+    parser.add_argument("-h", "-help", action="help", help = "Show this help message and exit")
+    process_parser.add_argument("input_image", action = "store")
+    process_parser.add_argument("output_directory", action = "store")
+    process_parser.add_argument("-f", "-filter", action="append", nargs = "*", help = "Add an effect/filter to the image")
     
     
     if len(sys.argv) <= 1:
-        print(f"usage: {parser.prog} process <input_image> <output_path> -f <effects>")
+        parser.print_help()
         sys.exit()
     
     args = parser.parse_args()
     print(args)
-    # verify(args.input_image, args.output_path, args.process)
+
+    if args.command.lower() == "process":
+        verify(args.input_image, args.output_directory, args.f)
 
 if __name__ == "__main__":
     main()
