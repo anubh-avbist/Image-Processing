@@ -8,7 +8,7 @@ $ impro.py process path/to/image/picture.png output/directory -f textify 'monosp
 ```
 
 ## Project Structure
-The CLI is built using argparse in the impro.py file. The image effects are all applied with PyGame Surfaces, and can be found in the effects folder. The effect.py file contains the Abstract Base Class for building the image effects/filters to add to the project.
+The CLI is built using argparse in the impro.py file. The image effects are all applied with PyGame Surfaces, and can be found in the effects folder. The effect.py file contains the Abstract Base Class for building the image effects/filters that can be added to the project.
 
 ### Creating Your Own Effect/Filter
 1. Create a python script, my_effect.py, including a class that inherits from Effect abstract base class.
