@@ -14,8 +14,10 @@ The CLI is built using argparse in the impro.py file. The image effects are all 
 1. Create a python script, my_effect.py, including a class that inherits from Effect abstract base class.
 2. Write the required apply method with this signature:
 ```python
-def apply(image: pygame.Surface, *parameters) -> pygame.Surface:
-  # Implementation
+class MyEffect(Effect):
+  @staticmethod
+  def apply(image: pygame.Surface, *parameters) -> pygame.Surface:
+    # Implementation
 ```
 3. Update impro.py to include the new MyEffect class in EFFECTS:
 ```python
