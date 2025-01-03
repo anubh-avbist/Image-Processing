@@ -9,10 +9,20 @@ import pygame
 from enum import Enum
 
 EFFECTS = {
-    "dither": dither.Dither,
-    "edge": edge.Edge,
+    "edge": edge.Edge,          #Currently WIP
     "textify": textify.Textify
 }
+
+def list_effects():
+    print(f"Filters/effects to use with process\nExample usage: impro input_image output_path -f dither 3 -f textify 1.1 4)\n")
+    
+    for effect in EFFECTS.keys():
+        required_parameters = EFFECTS[effect].required_parameters
+        optional_parameters = EFFECTS[effect].optional_parameters
+        required_string = " ".join( map(lambda s : f"[{s}]", required_parameters))
+        optional_string = " ".join( map(lambda s : f"<{s}>", optional_parameters))
+        output = f"| {effect} {required_string} {optional_string}"
+        print(f"{output :<30}{f"\n{" "*30}" if len(output)>30 else ""}{EFFECTS[effect].description}")
 
 def process(filename, img:pygame.Surface, output_directory, args: list[list[str]]):
     
@@ -23,7 +33,9 @@ def process(filename, img:pygame.Surface, output_directory, args: list[list[str]
         filters.append(arg[0])
         processed_image = effect.apply(processed_image, *arg[1:])
 
-    pygame.image.save(processed_image, f"{output_directory}/{os.path.splitext(filename)[0]}_{'_'.join(filters)}{os.path.splitext(filename)[1]}")
+    output = f"{output_directory}/{os.path.splitext(filename)[0]}_{'_'.join(filters)}{os.path.splitext(filename)[1]}"
+    pygame.image.save(processed_image, output)
+    print(f"Image successfully created at: {output}")
 
 def verify(input_path, output_directory, filters: list[list[str]]):
     filename = os.path.basename(input_path)
@@ -63,8 +75,8 @@ def main():
         )
     
     subparsers = parser.add_subparsers(dest="command")
-    list_parser = subparsers.add_parser('list', help = "List the shit")
-    process_parser = subparsers.add_parser('process', help = "Process the shit")
+    list_parser = subparsers.add_parser('list', help = "List all currently implemented image effects/filters")
+    process_parser = subparsers.add_parser('process', help = "Apply filters on image and output to specified directory")
 
 
     parser.add_argument("-h", "-help", action="help", help = "Show this help message and exit")
@@ -78,10 +90,13 @@ def main():
         sys.exit()
     
     args = parser.parse_args()
-    print(args)
+    
 
     if args.command.lower() == "process":
         verify(args.input_image, args.output_directory, args.f)
+    
+    elif args.command.lower() == "list":
+        list_effects()
 
 if __name__ == "__main__":
     main()

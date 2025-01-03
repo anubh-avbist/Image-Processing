@@ -2,6 +2,10 @@ from effects.effect import Effect
 import pygame
 
 class Textify(Effect):
+    
+    description = "Replaces chunks of the image with text to create ASCII-type art."
+    required_parameters = []
+    optional_parameters = ["font_family", "font_size", "chunk_size"]
 
     @staticmethod
     def draw_text(screen, text, font, color, x, y):
@@ -17,8 +21,8 @@ class Textify(Effect):
         index = len(grayscale)*(ratio*ratio) 
 
         # Clamps index to scale length
-        if index >= grayscale.__len__():
-            index = grayscale.__len__()-1
+        if index >= len(grayscale):
+            index = len(grayscale)-1
         elif index <0:
             index = 0
         return grayscale[int(index)]
@@ -38,8 +42,6 @@ class Textify(Effect):
         pygame.font.init()
         text_font = pygame.font.SysFont(font_family,font_size)
 
-        # font = parameters[0]
-        # font_size = parameters[1]
         # Creates text map
         ascii_array = []
         color_array = []

@@ -2,13 +2,18 @@ import pygame
 import math
 import numpy
 from abc import ABC, abstractmethod
+
+# The effect class is the base for building all image-processing effects.
 class Effect(ABC):
 
+    description = "Default description for effects/image processes."
+    required_parameters = []
+    optional_parameters = []
     @staticmethod
     def get_val(pixel):
-        val = (pixel[0]+pixel[1]+pixel[2])/3 # Returns pixel brightness
+        val = (0.299*pixel[0]+0.587*pixel[1]+0.114*pixel[2]) # Returns pixel brightness
         return val 
-
+    
     @staticmethod
     def create_image_matrix(image):
         cols = math.floor((image.get_height()))
