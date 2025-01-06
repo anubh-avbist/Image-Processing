@@ -2,7 +2,7 @@
 A simple CLI written in python to assist in rapidly developing and testing different image-processing filters/effects. Currently includes gradient-edge detection filter and textify effect as example Effects.
 
 ## Usage
-Run ```python impro.py -h ``` and ```python impro.py -l``` for help and list of filters. You can append as many filters using ```-f``` to apply the filters in order. Example usage:
+Run ```python impro.py -h ``` and ```python impro.py list``` for help and list of filters. You can append as many filters using ```-f``` to apply the filters in order. Example usage:
 ```console
 $ impro.py process path/to/image/picture.png output/directory -f textify 'monospace' 6 6 -f edge
 ```
