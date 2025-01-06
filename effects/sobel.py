@@ -2,7 +2,7 @@ from effects.effect import Effect
 import pygame
 import numpy
 
-class Edge(Effect):
+class Sobel(Effect):
 
     @staticmethod
     def convolve(frame,kernal):
@@ -27,7 +27,7 @@ class Edge(Effect):
                 for a in range (-1,2):
                     for b in range (-1,2):
                         frame[a+1][b+1] = Effect.get_val(image.get_at((i+a,j+b)))
-                value = (Edge.convolve(frame,hor_kernal) + Edge.convolve(frame,vert_kernal)) /2
+                value = (Sobel.convolve(frame,hor_kernal) + Sobel.convolve(frame,vert_kernal)) /2
                 
                 value = int(value)
                 
@@ -40,6 +40,6 @@ class Edge(Effect):
         horizontal_kernal = numpy.matrix('1,0,-1; 2,0,-2; 1,0,-1')
         vertical_kernal = numpy.matrix('1,2,1; 0,0,0; -1,-2,-1')
         
-        edge_image = Edge.find_edges(image, horizontal_kernal, vertical_kernal)
+        edge_image = Sobel.find_edges(image, horizontal_kernal, vertical_kernal)
         
         return edge_image
