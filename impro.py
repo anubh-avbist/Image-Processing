@@ -4,13 +4,14 @@ import argparse
 import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
 
-from effects import dither, edge, textify
+from effects import dither, edge, textify, identity
 import pygame
 from enum import Enum
 
 EFFECTS = {
     "edge": edge.Edge,          #Currently WIP
-    "textify": textify.Textify
+    "textify": textify.Textify,
+    "identity": identity.Identity
 }
 
 def list_effects():
@@ -101,37 +102,4 @@ def main():
 if __name__ == "__main__":
     main()
 
-
-"""impro
-Usage: impro process <input_image> <output_path> -f <effects>
-"""
-
-
-""" impro -h
-Command-Line for Image Processing
-
-Commands:
-List                                            Lists all possible filters
-Process [Input] [Output] <Filters>              Processes image
-
-Options:
--h, --help,                                     Show this help message and exit
--f, --filter [Filtername] <Parameters>          Used with Process to specify filters
-
-"""
-
-""" impro list
-Filters/effects to use with process
-Example usage: impro input_image output_path -f dither 3 -f textify 1.1 4
-
-dither <arg1> <arg2>            Description of filter and parameters. Could be quite long.
-textify <arg1>                  Description of filter and parameters
-
-"""
-
-
-""" impro -h dither
-dither <arg1> <arg2>            Description of filter and parameters for dither specifically.
-
-"""
 

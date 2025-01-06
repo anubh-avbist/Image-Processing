@@ -4,7 +4,7 @@ import math
 import numpy
 import numpy.linalg
 
-image = pygame.image.load("images/Ramona.png")
+image = pygame.image.load("../images/Ramona500.png")
 image = pygame.transform.scale(image,(800,800))
 width = image.get_width()
 height = image.get_height()
@@ -101,7 +101,7 @@ while running:
         if pressed[pygame.K_q]:
             running = False
         if pressed[pygame.K_c]:
-            pygame.image.save(screen, "images/gradient.jpeg")
+            pygame.image.save(screen, "../output/gradient.jpeg")
 
 
     if cam is not None: 
