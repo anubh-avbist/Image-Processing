@@ -5,7 +5,7 @@ from functools import reduce
 import re
 class Quantize(Effect):
 
-    description = "Limits color pallete to a certain number of colors. Distance parameter specifies the minimum euclidean distance between colors in pallette."
+    description = "Limits color pallete to a certain number of colors. Distance parameter specifies the minimum euclidean distance between colors in palette."
     optional_parameters = ["distance"]
     required_parameters = ["num_colors"]
 
@@ -13,14 +13,14 @@ class Quantize(Effect):
     def euclidean_distance(a:pygame.Color, b:pygame.Color) -> float:
         return sqrt((b.r-a.r)**2 + (b.g-a.g)**2 + (b.b-a.b)**2)
     @staticmethod
-    def get_color_pallette(image:pygame.Surface, num: int=8, distance:float=10) -> list[pygame.Color]:
+    def get_color_palette(image:pygame.Surface, num: int=8, distance:float=10) -> list[pygame.Color]:
         output = []
         histogram = {}
         width = image.get_width()
         height = image.get_height()
 
-        for j in range(width):
-            for i in range(height):
+        for j in range(height):
+            for i in range(width):
                 color = image.get_at((i,j))
                 key = f"r{color.r}g{color.g}b{color.b}"
                 if key in histogram.keys():
@@ -60,17 +60,17 @@ class Quantize(Effect):
         args = iter(parameters)
         num_colors = int(next(args,8))
         distance = float(next(args, 150))
-        pallette = Quantize.get_color_pallette(image, num_colors, distance)
+        palette = Quantize.get_color_palette(image, num_colors, distance)
         
-        for j in range(width):
-            for i in range(height):
+        for j in range(height):
+            for i in range(width):
                 def get_closest(a:pygame.Color, b:pygame.Color):
                     if Quantize.euclidean_distance(a, image.get_at((i,j))) <Quantize.euclidean_distance(b, image.get_at((i,j))):
                         return a
                     return b
-                color = reduce(get_closest, pallette)
+                color = reduce(get_closest, palette)
                 image.set_at((i,j), color)
-        print(f"Color pallete used: \n {pallette}")
+        print(f"Color pallete used: \n {palette}")
         return image
     
     
