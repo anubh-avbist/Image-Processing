@@ -4,6 +4,10 @@ import numpy
 
 class Sobel(Effect):
 
+    description = "Highlights the edges in the image and returns a grayscale image."
+    required_parameters = []
+    optional_parameters = []
+
     @staticmethod
     def convolve(frame,kernal):
         value = 0
