@@ -4,14 +4,16 @@ import argparse
 import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
 
-from effects import dither, sobel, textify, identity
+from effects import dither, sobel, textify, identity, quantize
 import pygame
 from enum import Enum
 
 EFFECTS = {
-    "sobel": sobel.Sobel,          #Currently WIP
+    "sobel": sobel.Sobel,          
     "textify": textify.Textify,
-    "identity": identity.Identity
+    "identity": identity.Identity,
+    "dither": dither.Dither,
+    "quantize": quantize.Quantize
 }
 
 def list_effects():
