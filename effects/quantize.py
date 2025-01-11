@@ -25,9 +25,9 @@ class Quantize(Effect):
                     if Quantize.euclidean_distance(a, image.get_at((i,j))) <Quantize.euclidean_distance(b, image.get_at((i,j))):
                         return a
                     return b
-                color = reduce(get_closest, pallette)
+                color = reduce(get_closest, palette)
                 image.set_at((i,j), color)
-        print(f"Color pallete used: \n {pallette}")
+        print(f"Color pallete used: \n {palette}")
         return image
     
     
