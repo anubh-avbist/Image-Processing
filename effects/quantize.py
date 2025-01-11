@@ -2,54 +2,54 @@ from math import sqrt
 from effects.effect import Effect
 import pygame, math
 from functools import reduce
-import re
+import re, itertools
 class Quantize(Effect):
 
     description = "Limits color pallete to a certain number of colors. Distance parameter specifies the minimum euclidean distance between colors in pallette."
-    optional_parameters = ["distance"]
+    optional_parameters = []
     required_parameters = ["num_colors"]
 
     @staticmethod 
     def euclidean_distance(a:pygame.Color, b:pygame.Color) -> float:
         return sqrt((b.r-a.r)**2 + (b.g-a.g)**2 + (b.b-a.b)**2)
+    
     @staticmethod
-    def get_color_pallette(image:pygame.Surface, num: int=8, distance:float=10) -> list[pygame.Color]:
-        output = []
-        histogram = {}
+    def get_color_pallette(image:pygame.Surface, num: int=8) -> list[pygame.Color]:
+
         width = image.get_width()
         height = image.get_height()
+        pixels = [image.get_at(pos) for pos in itertools.product(range(width),range(height))]
 
-        for j in range(width):
-            for i in range(height):
-                color = image.get_at((i,j))
-                key = f"r{color.r}g{color.g}b{color.b}"
-                if key in histogram.keys():
-                    histogram[key]+=1
-                else:
-                    histogram[key] = 1
-    
-        ordered_histogram = []
-        for key in histogram:
-            ordered_histogram.append((key,histogram[key]))
-        ordered_histogram = sorted(ordered_histogram, key=lambda count:count[1])
-        def string_to_rgb(s):
-            return pygame.Color(*list((map(lambda x: int(x), filter(lambda x:len(x)>0,re.split('r|g|b', s))))))
+        def bucket(pixels:list[pygame.Color], num:int) -> list[pygame.Color]:
+            if num <= 1:
+                rgb = [0,0,0]
+                for pixel in pixels:
+                    rgb[0] += pixel.r
+                    rgb[1] += pixel.g
+                    rgb[2] += pixel.b
 
-        colors = list(map(lambda x:string_to_rgb(x[0]), ordered_histogram))
-        
-        if len(colors) < num:
-            return colors
-        else:
-            for color in colors:
-                using = True
-                for used in output:
-                    if Quantize.euclidean_distance(color,used) < distance:
-                        using = False
-                    
-                if using == True:
-                    output.append(color)
-                    
-        return output[0:num]
+                rgb = [int(rgb[0]/len(pixels)), int(rgb[1]/len(pixels)), int(rgb[2]/len(pixels))] 
+                #print(len(pixels))
+                return [pygame.Color(*rgb)]
+            
+            maxes = [-1,-1,-1]
+            mins = [256,256,256]
+
+            for pixel in pixels:
+                maxes[0] = max(maxes[0], pixel.r)
+                maxes[1] = max(maxes[1], pixel.g)
+                maxes[2] = max(maxes[2], pixel.b)
+                maxes[0] = min(mins[0], pixel.r)
+                mins[1] = min(mins[1], pixel.g)
+                mins[2] = min(mins[2], pixel.b)
+                                    
+            ranges = [a-b for a,b in zip(maxes,mins)]
+            index = ranges.index(max(ranges))
+            pixels = sorted(pixels, key=lambda x:x[index])
+            
+            return bucket(pixels[:math.floor(len(pixels)/2)], int(num/2)) + bucket(pixels[math.floor(len(pixels)/2):], int(num/2)) 
+
+        return bucket(pixels, num)       
 
     @staticmethod
     def apply(image: pygame.Surface, *parameters) -> pygame.Surface:
@@ -59,11 +59,10 @@ class Quantize(Effect):
 
         args = iter(parameters)
         num_colors = int(next(args,8))
-        distance = float(next(args, 150))
-        pallette = Quantize.get_color_pallette(image, num_colors, distance)
+        pallette = Quantize.get_color_pallette(image, num_colors)
         
-        for j in range(width):
-            for i in range(height):
+        for j in range(height):
+            for i in range(width):
                 def get_closest(a:pygame.Color, b:pygame.Color):
                     if Quantize.euclidean_distance(a, image.get_at((i,j))) <Quantize.euclidean_distance(b, image.get_at((i,j))):
                         return a
