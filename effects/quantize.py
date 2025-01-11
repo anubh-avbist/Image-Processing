@@ -5,9 +5,9 @@ from functools import reduce
 import re, itertools
 class Quantize(Effect):
 
-    description = "Limits color pallete to a certain number of colors. Distance parameter specifies the minimum euclidean distance between colors in pallette."
-    optional_parameters = []
-    required_parameters = ["num_colors"]
+    description = "Limits color pallete to a certain number of colors."
+    optional_parameters = ["num_colors"]
+    required_parameters = []
 
     @staticmethod
     def apply(image: pygame.Surface, *parameters) -> pygame.Surface:
@@ -17,7 +17,7 @@ class Quantize(Effect):
 
         args = iter(parameters)
         num_colors = int(next(args,8))
-        pallette = Effect.median_cut_palette(image, num_colors)
+        palette = Effect.median_cut_palette(image, num_colors)
         
         for j in range(height):
             for i in range(width):
