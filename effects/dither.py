@@ -3,15 +3,19 @@ import pygame
 
 class Dither(Effect):
 
-    description = "Dither effect description."
-
+    description = "Applies Floyd-Steinberg dithering with a median-cut color palette."
+    required_parameters = ["num_colors"]
     @staticmethod
     def apply(image: pygame.Surface, *parameters) -> pygame.Surface:
         
+        args = iter(parameters)
+        num_colors = int(next(args,8))
+
         height = image.get_height()
         width = image.get_width()
 
-        palette = Effect.median_cut_palette(image, 8)
+
+        palette = Effect.median_cut_palette(image, num_colors)
         for j in range(height):
             for i in range(width):
                 old_pixel = image.get_at((i,j))
