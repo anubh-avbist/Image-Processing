@@ -4,7 +4,7 @@ import argparse
 import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
 
-from effects import dither, sobel, textify, identity, quantize
+from effects import dither, sobel, textify, identity, quantize, swizzle
 import pygame
 from enum import Enum
 
@@ -13,7 +13,8 @@ EFFECTS = {
     "textify": textify.Textify,
     "identity": identity.Identity,
     "dither": dither.Dither,
-    "quantize": quantize.Quantize
+    "quantize": quantize.Quantize,
+    "swizzle": swizzle.Swizzle
 }
 
 def list_effects():
