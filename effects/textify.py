@@ -1,5 +1,5 @@
 from effects.effect import Effect
-import pygame
+import pygame,sys
 
 class Textify(Effect):
     
@@ -37,8 +37,14 @@ class Textify(Effect):
 
         args = iter(parameters)
         font_family = next(args,'monospace')
-        font_size = int(next(args,12))
-        pixel_size:int = int(next(args,12))
+
+
+        try:
+            font_size = int(next(args,12))
+            pixel_size:int = int(next(args,12))
+        except Exception as e:
+            print("Please insert an integer for num_colors")
+            sys.exit()
         pygame.font.init()
         text_font = pygame.font.SysFont(font_family,font_size)
 

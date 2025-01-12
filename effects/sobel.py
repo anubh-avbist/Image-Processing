@@ -21,7 +21,7 @@ class Sobel(Effect):
     def find_edges(image: pygame.Surface, hor_kernal, vert_kernal) -> pygame.Surface: # assuming all kernals are 3x3
         rows = image.get_size()[0]-2
         cols = image.get_size()[1]-2
-        edged_image = pygame.display.set_mode(image.get_size())
+        edged_image = pygame.Surface(image.get_size())
         
         edged_image.fill((0,0,0))
         

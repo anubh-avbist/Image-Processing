@@ -1,5 +1,5 @@
 from effects.effect import Effect
-import pygame
+import pygame, sys
 
 class Dither(Effect):
 
@@ -9,7 +9,12 @@ class Dither(Effect):
     def apply(image: pygame.Surface, *parameters) -> pygame.Surface:
         
         args = iter(parameters)
-        num_colors = int(next(args,8))
+        
+        try:
+            num_colors = int(next(args,8))
+        except Exception as e:
+            print("Please insert an integer for num_colors")
+            sys.exit()
 
         height = image.get_height()
         width = image.get_width()

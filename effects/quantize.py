@@ -3,6 +3,7 @@ from effects.effect import Effect
 import pygame, math
 from functools import reduce
 import re, itertools
+import sys
 class Quantize(Effect):
 
     description = "Limits color pallete to a certain number of colors."
@@ -16,7 +17,12 @@ class Quantize(Effect):
         height = image.get_height()
 
         args = iter(parameters)
-        num_colors = int(next(args,8))
+        
+        try:
+            num_colors = int(next(args,8))
+        except Exception as e:
+            print("Please insert an integer for num_colors")
+            sys.exit()
         palette = Effect.median_cut_palette(image, num_colors)
         
         for j in range(height):
