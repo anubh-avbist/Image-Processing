@@ -14,7 +14,6 @@ class Sobel(Effect):
         for j in range (0,3):
             for i in range (0,3):
                 value += frame[i,j]*kernal[i,j]
-        value = value /4
         return min(255,max(0,value))
 
     @staticmethod
