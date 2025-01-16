@@ -5,7 +5,7 @@ import os
 
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
 
-from effects import dither, sobel, textify, identity, quantize, swizzle, aberrate
+from effects import dither, sobel, textify, identity, quantize, swizzle, aberrate, scale
 import pygame
 from enum import Enum
 
@@ -16,7 +16,8 @@ EFFECTS = {
     "dither": dither.Dither,
     "quantize": quantize.Quantize,
     "swizzle": swizzle.Swizzle,
-    "aberrate": aberrate.Aberrate
+    "aberrate": aberrate.Aberrate,
+    "scale": scale.Scale
 }
 
 def list_effects():
