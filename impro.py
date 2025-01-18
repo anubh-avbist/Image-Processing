@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import argparse
-import os
+import os, time
 
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
 
@@ -11,9 +11,9 @@ import pygame
 from enum import Enum
 
 EFFECTS = {
+    "identity": identity.Identity,
     "sobel": sobel.Sobel,          
     "textify": textify.Textify,
-    "identity": identity.Identity,
     "dither": dither.Dither,
     "quantize": quantize.Quantize,
     "swizzle": swizzle.Swizzle,
@@ -33,20 +33,25 @@ def list_effects():
         output = f"| {effect} {required_string} {optional_string}"
         print(f"{output :<30}{f"\n{" "*30}" if len(output)>30 else ""}{EFFECTS[effect].description}")
 
-def process(filename, img:pygame.Surface, output_directory, args: list[list[str]]):
+def process(filename, img:pygame.Surface, output_directory, args: list[list[str]], debug = False):
     
     processed_image:pygame.Surface = img
     filters = []
     for arg in args:
+        start = time.process_time()
         effect = EFFECTS[arg[0]]
         filters.append(arg[0])
         processed_image = effect.apply(processed_image, *arg[1:])
+
+        if debug:
+            
+            print(f"Time taken for {arg[0] :<20}{f"\n{" "*20}" if len(arg[0])>20 else ""}{float(time.process_time()-start):.5f}")
 
     output = f"{output_directory}/{os.path.splitext(filename)[0]}_{'_'.join(filters)}{os.path.splitext(filename)[1]}"
     pygame.image.save(processed_image, output)
     print(f"Image successfully created at: {output}")
 
-def verify(input_path, output_directory, filters: list[list[str]]):
+def verify(input_path, output_directory, filters: list[list[str]], debug = False):
     filename = os.path.basename(input_path)
     try:
         image = pygame.image.load(input_path)
@@ -73,7 +78,7 @@ def verify(input_path, output_directory, filters: list[list[str]]):
         print(f"Processes/Filters not found: {[e[0] for e in list(filters) if not e[0].lower() in EFFECTS]}")
         return -1
     
-    process(filename, image, output_directory, pipeline)
+    process(filename, image, output_directory, pipeline, debug)
 
 
 def main():
@@ -87,10 +92,11 @@ def main():
     list_parser = subparsers.add_parser('list', help = "List all currently implemented image effects/filters")
     process_parser = subparsers.add_parser('process', help = "Apply filters on image and output to specified directory")
 
-
+    
     parser.add_argument("-h", "-help", action="help", help = "Show this help message and exit")
     process_parser.add_argument("input_image", action = "store")
     process_parser.add_argument("output_directory", action = "store")
+    process_parser.add_argument("-debug", action="store_true", help = "Get debug information.")
     process_parser.add_argument("-f", "-filter", action="append", nargs = "*", help = "Add an effect/filter to the image")
     
     
@@ -102,7 +108,7 @@ def main():
     
 
     if args.command.lower() == "process":
-        verify(args.input_image, args.output_directory, args.f)
+        verify(args.input_image, args.output_directory, args.f, args.debug)
     
     elif args.command.lower() == "list":
         list_effects()

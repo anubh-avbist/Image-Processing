@@ -33,7 +33,7 @@ class Quantize(Effect):
                     return b
                 color = reduce(get_closest, palette)
                 image.set_at((i,j), color)
-        print(f"Color pallete used: \n {palette}")
+        # print(f"Color pallete used: \n {palette}")
         return image
     
     
