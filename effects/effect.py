@@ -65,8 +65,7 @@ class Effect(ABC):
 
     @staticmethod
     def get_val(pixel:pygame.Color):
-        val = (0.299*pixel[0]+0.587*pixel[1]+0.114*pixel[2]) # Returns pixel brightness
-        return val 
+        return (0.299*pixel[0]+0.587*pixel[1]+0.114*pixel[2]) # Returns pixel brightness
     
     @staticmethod
     @abstractmethod

@@ -96,7 +96,7 @@ def main():
     parser.add_argument("-h", "-help", action="help", help = "Show this help message and exit")
     process_parser.add_argument("input_image", action = "store")
     process_parser.add_argument("output_directory", action = "store")
-    process_parser.add_argument("-debug", action="store_true", help = "Get debug information.")
+    process_parser.add_argument("--debug", action="store_true", help = "Get debug information.")
     process_parser.add_argument("-f", "-filter", action="append", nargs = "*", help = "Add an effect/filter to the image")
     
     
