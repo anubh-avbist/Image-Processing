@@ -19,7 +19,6 @@ class Dither(Effect):
         height = image.get_height()
         width = image.get_width()
 
-
         palette = Effect.median_cut_palette(image, num_colors)
         for j in range(height):
             for i in range(width):

@@ -39,9 +39,8 @@ class Effect(ABC):
                     rgb[0] += pixel.r
                     rgb[1] += pixel.g
                     rgb[2] += pixel.b
-
-                rgb = [int(rgb[0]/len(pixels)), int(rgb[1]/len(pixels)), int(rgb[2]/len(pixels))] 
-                #print(len(pixels))
+                
+                rgb = [int(channel/len(pixels)) for channel in rgb]
                 return [pygame.Color(*rgb)]
             
             maxes = [-1,-1,-1]
@@ -51,13 +50,13 @@ class Effect(ABC):
                 maxes[0] = max(maxes[0], pixel.r)
                 maxes[1] = max(maxes[1], pixel.g)
                 maxes[2] = max(maxes[2], pixel.b)
-                maxes[0] = min(mins[0], pixel.r)
+                mins[0] = min(mins[0], pixel.r)
                 mins[1] = min(mins[1], pixel.g)
                 mins[2] = min(mins[2], pixel.b)
                                     
             ranges = [a-b for a,b in zip(maxes,mins)]
             index = ranges.index(max(ranges))
-            pixels = sorted(pixels, key=lambda x:x[index])
+            pixels = sorted(pixels, key=lambda p:p[index])
             
             return bucket(pixels[:math.floor(len(pixels)/2)], int(num/2)) + bucket(pixels[math.floor(len(pixels)/2):], int(num/2)) 
 
@@ -65,7 +64,7 @@ class Effect(ABC):
 
     @staticmethod
     def get_val(pixel:pygame.Color):
-        return (0.299*pixel[0]+0.587*pixel[1]+0.114*pixel[2]) # Returns pixel brightness
+        return pixel.grayscale().r # Returns pixel brightness
     
     @staticmethod
     @abstractmethod
