@@ -68,7 +68,7 @@ def verify(input_path, output_directory, filters: list[list[str]], debug = False
         return -1
 
     if filters == None:
-        print(f"No effects applied, no file created. Use -p <effect_one> <effect_two> etc.")
+        print(f"No effects applied, no file created. Use -f <effect_one> <effect_two> etc.")
         return -1
     
 
