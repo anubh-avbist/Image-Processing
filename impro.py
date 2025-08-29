@@ -6,7 +6,7 @@ import os, time
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
 
 from effects import dither, scale_2, sobel, textify, identity, quantize, swizzle, aberrate, scale
-from effects import grayscale
+from effects import grayscale, blackwhite
 import pygame
 from enum import Enum
 
@@ -20,7 +20,8 @@ EFFECTS = {
     "aberrate": aberrate.Aberrate,
     "scale": scale.Scale,
     "scale2": scale_2.Scale2,
-    "grayscale": grayscale.Grayscale
+    "grayscale": grayscale.Grayscale,
+    "blackwhite": blackwhite.BlackWhite
 }
 
 def list_effects():
